@@ -1,0 +1,14 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 공용 계정으로 로그인한 경우에만 플래너 문서를 읽고 쓸 수 있습니다.
+    // 아래 이메일을 실제 공용 계정 이메일로 바꿔서 콘솔 규칙에 붙여넣으세요.
+    match /planner/{docId} {
+      allow read, write: if request.auth != null
+        && request.auth.token.email == "REPLACE_WITH_LOGIN_EMAIL";
+    }
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
